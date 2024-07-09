@@ -1,0 +1,12 @@
+# Dependințe node
+node_modules/
+
+# Fișiere log
+*.log
+
+# Fișiere de mediu
+.env
+
+# Fișiere generate
+dist/
+coverage/
