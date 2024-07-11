@@ -62,9 +62,27 @@ export const deleteUser = async (req: Request, res: Response)=>{
   }
 }
 
+export const profileUser = async(req: Request, res: Response)=> {
+  const {email} = req.body;
+  
+  try{
+    const connection = connectToDatabase();
+    const [rows] = await (await connection).execute('SELECT username, email, description FROM user WHERE email = ?', [email]);
+    const user = (rows as any)[0];
+    if (!user){
+      return res.status(404).json({message: 'User not found'})
+    }
+    
+    res.json(user);
+  }catch(e){  
+    res.status(401).json({message: 'Invalid email to get'})
+  }
+}
+
 export const listAllUsers = async(req: Request, res: Response) => {
   const connection = await connectToDatabase();
-  const [rows] = await connection.execute('SELECT username, email, description FROM user');
+  const email = 'popicavlas@gmail.com'
+  const [rows] = await connection.execute('SELECT username, email, description FROM user WHERE email != ?', [email]);
   if(!rows){
     return res.status(401).json({ message: 'No users to display' });
   }
